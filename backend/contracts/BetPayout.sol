@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.24;
 
 import "./Bets.sol";
 import "./Math.sol";
 import "./Oracle.sol";
 
 
-contract BetPayout is SportsBets {
+contract BetPayout is Bets {
 
-    using SafeMath for uint; 
+    using Math for uint; 
 
     //constants 
     uint housePercentage = 1; 
@@ -31,8 +31,8 @@ contract BetPayout is SportsBets {
     /// @param _chosenWinner the participant chosen by the bettor as the winner 
     /// @param _actualWinner the actual winner 
     /// @return true if the bet was a winner
-    function _isWinningBet(OracleInterface.MatchOutcome _outcome, uint8 _chosenWinner, int8 _actualWinner) private pure returns (bool) {
-        return _outcome == OracleInterface.MatchOutcome.Decided && _chosenWinner >= 0 && (_chosenWinner == uint8(_actualWinner)); 
+    function _isWinningBet(Oracle.MatchOutcome _outcome, uint8 _chosenWinner, int8 _actualWinner) private pure returns (bool) {
+        return _outcome == Oracle.MatchOutcome.Decided && _chosenWinner >= 0 && (_chosenWinner == uint8(_actualWinner)); 
     }
 
     /// @notice calculates the amount to be paid out for a bet of the given amount, under the given circumstances
@@ -60,7 +60,7 @@ contract BetPayout is SportsBets {
     /// @param _matchId the unique id of the match
     /// @param _outcome the match's outcome
     /// @param _winner the index of the winner of the match (if not a draw)
-    function _payOutForMatch(bytes32 _matchId, OracleInterface.MatchOutcome _outcome, int8 _winner) private {
+    function _payOutForMatch(bytes32 _matchId, Oracle.MatchOutcome _outcome, int8 _winner) private {
     
         Bet[] storage bets = matchToBets[_matchId]; 
         uint losingTotal = 0; 
@@ -82,7 +82,7 @@ contract BetPayout is SportsBets {
 
         //calculate payouts per bet 
         for (n = 0; n < bets.length; n++) {
-            if (_outcome == OracleInterface.MatchOutcome.Draw) {
+            if (_outcome == Oracle.MatchOutcome.Draw) {
                 payouts[n] = bets[n].amount;
             } else {
                 if (_isWinningBet(_outcome, bets[n].chosenWinner, _winner)) {
@@ -106,13 +106,13 @@ contract BetPayout is SportsBets {
     /// @notice check the outcome of the given match; if ready, will trigger calculation of payout, and actual payout to winners
     /// @param _matchId the id of the match to check
     /// @return the outcome of the given match 
-    function checkOutcome(bytes32 _matchId) public notDisabled returns (OracleInterface.MatchOutcome)  {
-        OracleInterface.MatchOutcome outcome; 
+    function checkOutcome(bytes32 _matchId) public notDisabled returns (Oracle.MatchOutcome)  {
+        Oracle.MatchOutcome outcome; 
         int8 winner = -1;
 
         (,,,,,outcome,winner) = boxingOracle.getMatch(_matchId); 
 
-        if (outcome == OracleInterface.MatchOutcome.Decided) {
+        if (outcome == Oracle.MatchOutcome.Decided) {
             if (!matchPaidOut[_matchId]) {
                 _payOutForMatch(_matchId, outcome, winner);
             }

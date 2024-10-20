@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.24;
 
 import "./Disable.sol";
-import "./Owner.sol";
+import "./Oracle.sol";
 
 //TODO: cache matches so that we don't have to keep calling another contract (does it waste gas?)
 
@@ -10,7 +10,7 @@ contract Bets is Disableable {
 
     //boxing results oracle 
     address internal boxingOracleAddr = 0x6Dca9BB7dA4c09930A466956E0A3e3F7fee1ef7D;
-    OracleInterface internal boxingOracle = OracleInterface(boxingOracleAddr); 
+    Oracle internal boxingOracle = Oracle(boxingOracleAddr); 
 
     //constants
     uint internal minimumBet = 1000000000000;
@@ -59,9 +59,9 @@ contract Bets is Disableable {
     /// @param _matchId id of a match 
     /// @return true if the match is bettable 
     function _matchOpenForBetting(bytes32 _matchId) private view returns (bool) {
-        OracleInterface.MatchOutcome outcome; 
+        Oracle.MatchOutcome outcome; 
         (,,,,,outcome,) = getMatch(_matchId);
-        return outcome == OracleInterface.MatchOutcome.Pending;
+        return outcome == Oracle.MatchOutcome.Pending;
     }
 
 
@@ -71,7 +71,7 @@ contract Bets is Disableable {
     /// @return true if connection to the new oracle address was successful
     function setOracleAddress(address _oracleAddress) external onlyOwner returns (bool) {
         boxingOracleAddr = _oracleAddress;
-        boxingOracle = OracleInterface(boxingOracleAddr); 
+        boxingOracle = Oracle(boxingOracleAddr); 
         return boxingOracle.testConnection();
     }
 
@@ -83,40 +83,35 @@ contract Bets is Disableable {
 
     /// @notice gets a list ids of all currently bettable matches
     /// @return array of match ids 
-    function getBettableMatches() public view returns (bytes32[]) {
+    function getBettableMatches() public view returns (bytes32[] memory) {
         return boxingOracle.getPendingMatches(); 
     }
 
     /// @notice gets a list ids of all matches
     /// @return array of match ids 
-    function getMatches() public view returns (bytes32[]) {
+    function getMatches() public view returns (bytes32[] memory) {
         return boxingOracle.getAllMatches(); 
     }
 
-    /// @notice returns the full data of the specified match 
-    /// @param _matchId the id of the desired match
-    /// @return match data 
     function getMatch(bytes32 _matchId) public view returns (
         bytes32 id,
-        string name, 
-        string participants,
+        string memory name, 
+        string memory participants,
         uint8 participantCount,
         uint date, 
-        OracleInterface.MatchOutcome outcome, 
+        Oracle.MatchOutcome outcome, 
         int8 winner) { 
 
         return boxingOracle.getMatch(_matchId); 
     }
 
-    /// @notice returns the full data of the most recent bettable match 
-    /// @return match data 
     function getMostRecentMatch() public view returns (
         bytes32 id,
-        string name, 
-        string participants,
+        string memory name, 
+        string memory participants,
         uint participantCount, 
         uint date, 
-        OracleInterface.MatchOutcome outcome, 
+        Oracle.MatchOutcome outcome, 
         int8 winner) { 
 
         return boxingOracle.getMostRecentMatch(true); 
@@ -124,13 +119,10 @@ contract Bets is Disableable {
 
     /// @notice gets the current matches on which the user has bet 
     /// @return array of match ids 
-    function getUserBets() public view returns (bytes32[]) {
+    function getUserBets() public view returns (bytes32[] memory) {
         return userToBets[msg.sender];
     }
-
-    /// @notice gets a user's bet on a given match 
-    /// @param _matchId the id of the desired match 
-    /// @return tuple containing the bet amount, and the index of the chosen winner (or (0,0) if no bet found)
+    
     function getUserBet(bytes32 _matchId) public view returns (uint amount, uint8 winner) { 
         Bet[] storage bets = matchToBets[_matchId]; 
         for (uint n = 0; n < bets.length; n++) {
