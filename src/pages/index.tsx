@@ -187,7 +187,7 @@ const Home: NextPage = () => {
           <ConnectButton />
         </div>
 
-        {/* Wallet Card */}
+        {/* Wallet Card
         <div
           style={{
             border: "1px solid #ccc",
@@ -199,12 +199,7 @@ const Home: NextPage = () => {
             marginBottom: "20px", // Add margin below the card
           }}
         >
-          <img
-            src="/patriots-logo.png" // Ensure this path is correct
-            alt="New England Patriots Logo"
-            style={{ width: "100%", height: "auto", marginBottom: "10px" }}
-          />
-        </div>
+        </div> */}
 
         {/* Left Column: NFL Games */}
         <div
@@ -212,9 +207,10 @@ const Home: NextPage = () => {
             backgroundColor: "#1c1e22",
             borderRadius: "10px",
             padding: "20px",
-            width: "60%",
-            marginLeft: "20px",
+            width: "45%", // Adjusted width
+            margin: "0 auto", // Center the panel
             color: "white",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
         >
           <h2 style={{ marginBottom: "20px" }}>NFL Games - Week 7</h2>
@@ -250,7 +246,7 @@ const Home: NextPage = () => {
                     style={{
                       backgroundColor:
                         selectedGame?.game === game.time &&
-                        selectedGame?.team === team.name
+                          selectedGame?.team === team.name
                           ? "#007aff"
                           : "#1e293b",
                       color: "white",
@@ -394,64 +390,79 @@ const Home: NextPage = () => {
         {/* Comment Section */}
         <div
           style={{
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            padding: "20px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            textAlign: "center",
-            width: "300px", // Set a fixed width for the comment section
+            display: "flex", // Use flexbox for layout
+            justifyContent: "space-between", // Space between the panels
+            alignItems: "flex-start", // Align items to the top
+            padding: "20px", // Add padding around the container
           }}
         >
-          <h3>Leave a Comment</h3>
-          <form onSubmit={handleCommentSubmit}>
-            <textarea
-              value={comment}
-              onChange={handleCommentChange}
-              placeholder="Write your comment here..."
-              style={{
-                width: "100%",
-                height: "100px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                padding: "10px",
-                marginBottom: "10px",
-                resize: "none", // Prevent resizing
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#10b981",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Submit
-            </button>
-          </form>
-
-          {/* Display Comments */}
-          <div style={{ marginTop: "20px", textAlign: "left" }}>
-            {commentsList.length > 0 ? (
-              commentsList.map((c, index) => (
-                <div
-                  key={index}
-                  style={{
-                    marginBottom: "10px",
-                    borderBottom: "1px solid #ccc",
-                    paddingBottom: "5px",
-                  }}
-                >
-                  {c}
-                </div>
-              ))
-            ) : (
-              <p>No comments yet.</p>
-            )}
+          {/* Leave a Comment Panel */}
+          <div
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "20px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+              width: "70%", // Adjust width as needed
+              height: "400px", // Set a fixed height to match the NFL panel
+              marginRight: "80px", // Add margin to the right for spacing
+              marginTop: "-539px", // Remove any top margin
+              marginLeft: "-10px"
+            }}
+          >
+            <h3>Leave a Comment</h3>
+            <form onSubmit={handleCommentSubmit}>
+              <textarea
+                value={comment}
+                onChange={handleCommentChange}
+                placeholder="Write your comment here..."
+                style={{
+                  width: "100%",
+                  height: "150px", // Increased height for the textarea
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  marginBottom: "10px",
+                  resize: "none",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#10b981",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Submit
+              </button>
+            </form>
+            {/* Display Comments */}
+            <div style={{ marginTop: "20px", textAlign: "left" }}>
+              {commentsList.length > 0 ? (
+                commentsList.map((c, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      marginBottom: "10px",
+                      borderBottom: "1px solid #ccc",
+                      paddingBottom: "5px",
+                    }}
+                  >
+                    {c}
+                  </div>
+                ))
+              ) : (
+                <p>No comments yet.</p>
+              )}
+            </div>
           </div>
+
+
         </div>
       </div>
     </>

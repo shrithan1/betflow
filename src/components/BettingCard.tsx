@@ -140,7 +140,7 @@ export function BettingCard() {
   };
 
   return (
-    <Card className="w-[350px] bg-[#1c1e22] text-white shadow-lg fixed right-5 top-20">
+    <Card className="w-[300px] bg-[#1c1e22] text-white shadow-lg fixed right-5 top-20">
       <CardHeader>
         <CardTitle className="mb-5">Outcome</CardTitle>
       </CardHeader>
@@ -148,17 +148,15 @@ export function BettingCard() {
         <div className="flex justify-between mb-5">
           <Button
             onClick={() => selectTeam("Patriots")}
-            className={`w-[48%] ${
-              selectedTeam === "Patriots" ? "bg-[#007aff]" : "bg-[#1e293b]"
-            }`}
+            className={`w-[48%] ${selectedTeam === "Patriots" ? "bg-[#007aff]" : "bg-[#1e293b]"
+              }`}
           >
             Patriots {priceA}¢
           </Button>
           <Button
             onClick={() => selectTeam("Jaguars")}
-            className={`w-[48%] ${
-              selectedTeam === "Jaguars" ? "bg-[#007aff]" : "bg-[#1e293b]"
-            }`}
+            className={`w-[48%] ${selectedTeam === "Jaguars" ? "bg-[#007aff]" : "bg-[#1e293b]"
+              }`}
           >
             Jaguars {priceB}¢
           </Button>
