@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useWriteContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { z } from "zod";
 
 import {
@@ -22,172 +22,118 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const abi = [
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "previousOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
     inputs: [],
-    name: "Disable",
-    outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+    type: "constructor",
   },
   {
     inputs: [],
-    name: "Enable",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getBettableMatches",
-    outputs: [{ internalType: "bytes32[]", name: "", type: "bytes32[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "bytes32", name: "_matchId", type: "bytes32" }],
-    name: "getMatch",
+    name: "getA",
     outputs: [
-      { internalType: "bytes32", name: "id", type: "bytes32" },
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "participants", type: "string" },
-      { internalType: "uint8", name: "participantCount", type: "uint8" },
-      { internalType: "uint256", name: "date", type: "uint256" },
       {
-        internalType: "enum Oracle.MatchOutcome",
-        name: "outcome",
-        type: "uint8",
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
-      { internalType: "int8", name: "winner", type: "int8" },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "getMatches",
-    outputs: [{ internalType: "bytes32[]", name: "", type: "bytes32[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getMostRecentMatch",
+    name: "getB",
     outputs: [
-      { internalType: "bytes32", name: "id", type: "bytes32" },
-      { internalType: "string", name: "name", type: "string" },
-      { internalType: "string", name: "participants", type: "string" },
-      { internalType: "uint256", name: "participantCount", type: "uint256" },
-      { internalType: "uint256", name: "date", type: "uint256" },
       {
-        internalType: "enum Oracle.MatchOutcome",
-        name: "outcome",
-        type: "uint8",
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
-      { internalType: "int8", name: "winner", type: "int8" },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "getOracleAddress",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "bytes32", name: "_matchId", type: "bytes32" }],
-    name: "getUserBet",
+    name: "viewVolume",
     outputs: [
-      { internalType: "uint256", name: "amount", type: "uint256" },
-      { internalType: "uint8", name: "winner", type: "uint8" },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getUserBets",
-    outputs: [{ internalType: "bytes32[]", name: "", type: "bytes32[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "bytes32", name: "_matchId", type: "bytes32" },
-      { internalType: "uint8", name: "_chosenWinner", type: "uint8" },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
-    name: "placeBet",
+    name: "placeBets",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "address", name: "_oracleAddress", type: "address" },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
-    name: "setOracleAddress",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "testOracleConnection",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
-    name: "transferOwnership",
+    name: "placeBetsJag",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 const formSchema = z.object({
   amount: z.string().min(1).max(200),
 });
 
 export function BettingCard() {
+  const { data } = useReadContract({
+    address: "0x6224f3e0c3deDB6Da90A9545A9528cbed5DD7E53",
+    abi,
+    functionName: "viewVolume",
+    args: [],
+  });
+  console.log(data?.toString());
+
+  const tokenA = data?.[0] ? parseInt(data[0].toString()) : 0;
+  const tokenB = data?.[1] ? parseInt(data[1].toString()) : 0;
+  const priceA = 100 * (tokenA / (tokenA + tokenB));
+  const priceB = 100 * (tokenB / (tokenA + tokenB));
+  console.log(tokenA, tokenB, priceA, priceB);
+
+  const { writeContract } = useWriteContract();
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       amount: "",
     },
   });
 
-  const onSubmit = async (data: { amount: string }) => {
-    // Your bet placing logic here
-    console.log("Placing bet:", { team: selectedTeam, amount: data.amount });
-  };
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    writeContract({
+      address: "0x6224f3e0c3deDB6Da90A9545A9528cbed5DD7E53",
+      abi: abi,
+      functionName: "placeBets",
+      args: [BigInt(values.amount)],
+    });
+  }
 
   const selectTeam = (team: string) => {
     setSelectedTeam(team);
@@ -206,7 +152,7 @@ export function BettingCard() {
               selectedTeam === "Patriots" ? "bg-[#007aff]" : "bg-[#1e293b]"
             }`}
           >
-            Patriots 50¢
+            Patriots {priceA}¢
           </Button>
           <Button
             onClick={() => selectTeam("Jaguars")}
@@ -214,7 +160,7 @@ export function BettingCard() {
               selectedTeam === "Jaguars" ? "bg-[#007aff]" : "bg-[#1e293b]"
             }`}
           >
-            Jaguars 50¢
+            Jaguars {priceB}¢
           </Button>
         </div>
 
@@ -241,8 +187,8 @@ export function BettingCard() {
         </Form>
 
         <div className="space-y-2">
-          <p>Avg Price: {selectedTeam ? "50¢" : "0¢"}</p>
-          <p>Shares: 0.00</p>
+          <p>Avg Price: {selectedTeam ? `${priceA}¢` : `${priceB}¢`}</p>
+          <p>Shares: {form.watch("amount")}</p>
           <p>Potential return: $0.00</p>
         </div>
 

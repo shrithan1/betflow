@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useState } from "react";
 import { BettingCard } from "../components/BettingCard";
+import { useReadContract } from "wagmi";
 
 // Object mapping team names to their logo URLs
 const teamLogos: Record<string, string> = {
@@ -15,42 +16,133 @@ const teamLogos: Record<string, string> = {
   Colts: "https://example.com/colts-logo.png", // Replace with actual logo URL
 };
 
-const nflGames = [
-  {
-    time: "6:30 AM",
-    volume: "$0",
-    teams: [
-      { name: "Patriots", record: "1-5", price: 50 },
-      { name: "Jaguars", record: "1-5", price: 50 },
-    ],
-  },
-  {
-    time: "10:00 AM",
-    volume: "$0",
-    teams: [
-      { name: "Texans", record: "5-1", price: 50 },
-      { name: "Packers", record: "4-2", price: 50 },
-    ],
-  },
-  {
-    time: "10:00 AM",
-    volume: "$0",
-    teams: [
-      { name: "Bengals", record: "2-4", price: 50 },
-      { name: "Browns", record: "1-5", price: 50 },
-    ],
-  },
-  {
-    time: "10:00 AM",
-    volume: "$0",
-    teams: [
-      { name: "Dolphins", record: "2-3", price: 50 },
-      { name: "Colts", record: "3-3", price: 50 },
-    ],
-  },
-];
-
 const Home: NextPage = () => {
+  const abi = [
+    {
+      inputs: [],
+      stateMutability: "nonpayable",
+      type: "constructor",
+    },
+    {
+      inputs: [],
+      name: "getA",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "getB",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "viewVolume",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "placeBets",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "placeBetsJag",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+  ] as const;
+
+  const { data } = useReadContract({
+    address: "0x6224f3e0c3deDB6Da90A9545A9528cbed5DD7E53",
+    abi,
+    functionName: "viewVolume",
+    args: [],
+  });
+  console.log(data?.toString());
+  const tokenA = data?.[0] ? parseInt(data[0].toString()) : 0;
+  const tokenB = data?.[1] ? parseInt(data[1].toString()) : 0;
+  const total = tokenA + tokenB;
+  const priceA = 100 * (tokenA / (tokenA + tokenB));
+  const priceB = 100 * (tokenB / (tokenA + tokenB));
+  console.log(tokenA, tokenB, priceA, priceB);
+
+  const nflGames = [
+    {
+      time: "6:30 AM",
+      volume: `$${total}`,
+      teams: [
+        { name: "Patriots", record: "1-5", price: priceA },
+        { name: "Jaguars", record: "1-5", price: priceB },
+      ],
+    },
+    {
+      time: "10:00 AM",
+      volume: "$0",
+      teams: [
+        { name: "Texans", record: "5-1", price: 50 },
+        { name: "Packers", record: "4-2", price: 50 },
+      ],
+    },
+    {
+      time: "10:00 AM",
+      volume: "$0",
+      teams: [
+        { name: "Bengals", record: "2-4", price: 50 },
+        { name: "Browns", record: "1-5", price: 50 },
+      ],
+    },
+    {
+      time: "10:00 AM",
+      volume: "$0",
+      teams: [
+        { name: "Dolphins", record: "2-3", price: 50 },
+        { name: "Colts", record: "3-3", price: 50 },
+      ],
+    },
+  ];
   const [selectedGame, setSelectedGame] = useState<{
     game: string;
     team: string;
@@ -73,7 +165,6 @@ const Home: NextPage = () => {
       setComment(""); // Clear the input after submission
     }
   };
-
   return (
     <>
       <div
@@ -93,7 +184,6 @@ const Home: NextPage = () => {
             marginBottom: "20px", // Add margin below the button
           }}
         >
-          <h2>Connect Your Wallet</h2>
           <ConnectButton />
         </div>
 
@@ -196,7 +286,7 @@ const Home: NextPage = () => {
         </div>
 
         {/* Right Column: Betting Card */}
-        <div
+        {/* <div
           style={{
             backgroundColor: "#1c1e22",
             borderRadius: "10px",
@@ -212,94 +302,95 @@ const Home: NextPage = () => {
           <h3 style={{ marginBottom: "20px" }}>Outcome</h3>
 
           {/* Outcomes */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "20px",
-            }}
-          >
-            <button
-              onClick={() => selectTeam("Patriots", 31)}
-              style={{
-                backgroundColor:
-                  selectedGame?.team === "Patriots" ? "#007aff" : "#1e293b",
-                color: "white",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "none",
-                width: "48%",
-                cursor: "pointer",
-              }}
-            >
-              Patriots 50¢
-            </button>
-            <button
-              onClick={() => selectTeam("Jaguars", 71)}
-              style={{
-                backgroundColor:
-                  selectedGame?.team === "Jaguars" ? "#007aff" : "#1e293b",
-                color: "white",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "none",
-                width: "48%",
-                cursor: "pointer",
-              }}
-            >
-              Jaguars 50¢
-            </button>
-          </div>
-
-          {/* Amount Input */}
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "8px" }}>
-              Amount
-            </label>
-            <input
-              type="number"
-              value={0}
-              onChange={() => {}} // Add logic here to handle amount change
-              style={{
-                width: "100%",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "1px solid #374151",
-                backgroundColor: "#2d2f34",
-                color: "white",
-              }}
-            />
-          </div>
-
-          {/* Avg Price, Shares, Potential Return */}
-          <div style={{ marginBottom: "20px" }}>
-            <p>
-              Avg Price:{" "}
-              {selectedGame?.team === "Patriots"
-                ? "0¢"
-                : selectedGame?.team === "Jaguars"
-                ? "0¢"
-                : "0¢"}
-            </p>
-            <p>Shares: 0.00</p>
-            <p>Potential return: $0.00</p>
-          </div>
-
-          {/* Submit Button */}
+        {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
           <button
+            onClick={() => selectTeam("Patriots", 31)}
             style={{
-              width: "100%",
-              padding: "10px",
-              backgroundColor: "#10b981",
+              backgroundColor:
+                selectedGame?.team === "Patriots" ? "#007aff" : "#1e293b",
               color: "white",
+              padding: "10px",
               borderRadius: "5px",
               border: "none",
+              width: "48%",
               cursor: "pointer",
             }}
           >
-            Place Bet
+            Patriots {priceA}¢
+          </button>
+          <button
+            onClick={() => selectTeam("Jaguars", 71)}
+            style={{
+              backgroundColor:
+                selectedGame?.team === "Jaguars" ? "#007aff" : "#1e293b",
+              color: "white",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "none",
+              width: "48%",
+              cursor: "pointer",
+            }}
+          >
+            Jaguars {priceB}¢
           </button>
         </div>
+
+        {/* Amount Input */}
+        {/* <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "8px" }}>
+            Amount
+          </label>
+          <input
+            type="number"
+            value={0}
+            onChange={() => {}} // Add logic here to handle amount change
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #374151",
+              backgroundColor: "#2d2f34",
+              color: "white",
+            }}
+          />
+        </div>
+
+        {/* Avg Price, Shares, Potential Return */}
+        {/* <div style={{ marginBottom: "20px" }}>
+          <p>
+            Avg Price:{" "}
+            {selectedGame?.team === "Patriots"
+              ? "0¢"
+              : selectedGame?.team === "Jaguars"
+              ? "0¢"
+              : "0¢"}
+          </p>
+          <p>Shares: 0.00</p>
+          <p>Potential return: $0.00</p>
+        </div> */}
+
+        {/* Submit Button */}
+        {/* <button
+          style={{
+            width: "100%",
+            padding: "10px",
+            backgroundColor: "#10b981",
+            color: "white",
+            borderRadius: "5px",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Place Bet
+        </button> */}
+        {/* </div> */}
+        <BettingCard />
         {/* Comment Section */}
         <div
           style={{
@@ -363,7 +454,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <BettingCard />
     </>
   );
 };
