@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useState } from "react";
 import type { NextPage } from "next";
@@ -12,6 +13,22 @@ const teamLogos: Record<string, string> = {
   Browns: "https://example.com/browns-logo.png", // Replace with actual logo URL
   Dolphins: "https://example.com/dolphins-logo.png", // Replace with actual logo URL
   Colts: "https://example.com/colts-logo.png", // Replace with actual logo URL
+=======
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import type { NextPage } from 'next';
+import { useState } from 'react';
+
+// Object mapping team names to their logo URLs
+const teamLogos: Record<string, string> = {
+  "Patriots": "https://example.com/patriots-logo.png", // Replace with actual logo URL
+  "Jaguars": "https://example.com/jaguars-logo.png",   // Replace with actual logo URL
+  "Texans": "https://example.com/texans-logo.png",     // Replace with actual logo URL
+  "Packers": "https://example.com/packers-logo.png",   // Replace with actual logo URL
+  "Bengals": "https://example.com/bengals-logo.png",   // Replace with actual logo URL
+  "Browns": "https://example.com/browns-logo.png",     // Replace with actual logo URL
+  "Dolphins": "https://example.com/dolphins-logo.png", // Replace with actual logo URL
+  "Colts": "https://example.com/colts-logo.png"        // Replace with actual logo URL
+>>>>>>> 441d994 (comment box)
 };
 
 const nflGames = [
@@ -201,16 +218,35 @@ const bet_abi = [
 ];
 
 const Home: NextPage = () => {
+<<<<<<< HEAD
   const [selectedGame, setSelectedGame] = useState<{
     game: string;
     team: string;
   } | null>(null);
+=======
+  const [selectedGame, setSelectedGame] = useState<{ game: string, team: string } | null>(null);
+  const [comment, setComment] = useState('');
+  const [commentsList, setCommentsList] = useState<string[]>([]);
+>>>>>>> 441d994 (comment box)
 
   const selectTeam = (game: string, team: string) => {
     setSelectedGame({ game, team });
   };
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (comment.trim()) {
+      setCommentsList([...commentsList, comment]);
+      setComment(''); // Clear the input after submission
+    }
+  };
+
   return (
+<<<<<<< HEAD
     <div
       style={{
         backgroundColor: "white",
@@ -230,7 +266,40 @@ const Home: NextPage = () => {
           right: "20px",
         }}
       >
+=======
+    <div style={{ 
+      backgroundColor: 'white', 
+      minHeight: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column', // Stack items vertically
+      alignItems: 'flex-start', // Align items to the left
+      padding: '20px', // Add padding around the container
+    }}>
+      {/* Connect Wallet Button at the Top Right */}
+      <div style={{
+        alignSelf: 'flex-end', // Align to the right
+        marginBottom: '20px', // Add margin below the button
+      }}>
+        <h2>Connect Your Wallet</h2>
+>>>>>>> 441d994 (comment box)
         <ConnectButton />
+      </div>
+
+      {/* Wallet Card */}
+      <div style={{
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        padding: '20px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        textAlign: 'center',
+        width: '300px', // Set a fixed width for the card
+        marginBottom: '20px', // Add margin below the card
+      }}>
+        <img 
+          src="/patriots-logo.png" // Ensure this path is correct
+          alt="New England Patriots Logo" 
+          style={{ width: '100%', height: 'auto', marginBottom: '10px' }} 
+        />
       </div>
 
       {/* Left Column: NFL Games */}
@@ -416,6 +485,59 @@ const Home: NextPage = () => {
         >
           Place Bet
         </button>
+      </div>
+
+      {/* Comment Section */}
+      <div style={{
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        padding: '20px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        textAlign: 'center',
+        width: '300px', // Set a fixed width for the comment section
+      }}>
+        <h3>Leave a Comment</h3>
+        <form onSubmit={handleCommentSubmit}>
+          <textarea
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Write your comment here..."
+            style={{
+              width: '100%',
+              height: '100px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+              padding: '10px',
+              marginBottom: '10px',
+              resize: 'none', // Prevent resizing
+            }}
+          />
+          <button 
+            type="submit" 
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}>
+            Submit
+          </button>
+        </form>
+
+        {/* Display Comments */}
+        <div style={{ marginTop: '20px', textAlign: 'left' }}>
+          {commentsList.length > 0 ? (
+            commentsList.map((c, index) => (
+              <div key={index} style={{ marginBottom: '10px', borderBottom: '1px solid #ccc', paddingBottom: '5px' }}>
+                {c}
+              </div>
+            ))
+          ) : (
+            <p>No comments yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );
