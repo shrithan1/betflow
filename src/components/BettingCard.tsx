@@ -148,15 +148,17 @@ export function BettingCard() {
         <div className="flex justify-between mb-5">
           <Button
             onClick={() => selectTeam("Patriots")}
-            className={`w-[48%] ${selectedTeam === "Patriots" ? "bg-[#007aff]" : "bg-[#1e293b]"
-              }`}
+            className={`w-[48%] ${
+              selectedTeam === "Patriots" ? "bg-[#007aff]" : "bg-[#1e293b]"
+            }`}
           >
             Patriots {priceA}¢
           </Button>
           <Button
             onClick={() => selectTeam("Jaguars")}
-            className={`w-[48%] ${selectedTeam === "Jaguars" ? "bg-[#007aff]" : "bg-[#1e293b]"
-              }`}
+            className={`w-[48%] ${
+              selectedTeam === "Jaguars" ? "bg-[#007aff]" : "bg-[#1e293b]"
+            }`}
           >
             Jaguars {priceB}¢
           </Button>
@@ -186,8 +188,20 @@ export function BettingCard() {
 
         <div className="space-y-2">
           <p>Avg Price: {selectedTeam ? `${priceA}¢` : `${priceB}¢`}</p>
-          <p>Shares: {form.watch("amount")}</p>
-          <p>Potential return: $0.00</p>
+          <p>
+            Shares:{" "}
+            {((Number(form.watch("amount") || 0) * 100) / priceA).toFixed(2)}
+          </p>
+          <p>
+            Potential return: ${""}
+            {((Number(form.watch("amount") || 0) * 100) / priceA).toFixed(2)}
+            {" ("}
+            {(((Number(form.watch("amount")) / priceA) * 100 -
+              Number(form.watch("amount"))) /
+              Number(form.watch("amount"))) *
+              100}
+            {"%) "}
+          </p>
         </div>
 
         <Button
