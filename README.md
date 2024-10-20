@@ -1,3 +1,14 @@
+## Project Description
+A transparent, crowdsourced sports betting platform on Flow's network utilizing smart contracts
+
+This project uses a combination of smart contracts and web2 frontend frameworks to design a onchain betting application that allows users to wage predictions on sports games, specifically football (NFL). We deployed smart contracts on Flow's testnet and enabled wallet integration. 
+
+Our team is a group of Berkeley students from Blockchain @ Berkeley. We are consultants, researchers, and developers building full-stack applications in the web3 space for multiple years now. Here is the team with our Twitter handles:
+Tanay Appannagari - 10a_app
+Shrithan Sandadi - shrithan_s
+Nicholas Qasawadish - NQasawadish
+
+
 This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](/packages/create-rainbowkit).
 
 ## Getting Started
@@ -21,9 +32,3 @@ To learn more about this stack, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
 
 You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
