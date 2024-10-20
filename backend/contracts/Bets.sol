@@ -13,7 +13,6 @@ pragma solidity ^0.8.24;
 //     Oracle internal boxingOracle = Oracle(boxingOracleAddr); 
 
 //     //constants
-//     uint internal minimumBet = 1000000000000;
     
 //     //mappings 
 //     mapping(address => bytes32[]) internal userToBets;
@@ -190,6 +189,7 @@ contract Bets {
 
     // Mapping to store the volume of bets on each match
     mapping(bytes32 => Match) public matches;
+    uint internal minimumBet = 1000000000000;
 
     // Mapping to store user shares for each match and team
     mapping(bytes32 => mapping(address => uint)) public userSharesA; // Shares for Team A
