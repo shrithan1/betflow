@@ -18,12 +18,14 @@ contract BetPayout is Bets {
     /// @param _user the user to whom to pay out 
     /// @param _amount the amount to pay out 
     function _payOutWinnings(address _user, uint _amount) private {
-        _user.transfer(_amount);
+        address payable user = payable(_user);
+        user.transfer(_amount);
     }
 
     /// @notice transfers any remaining to the house (the house's cut)
     function _transferToHouse() private {
-        owner.transfer(address(this).balance);
+        address payable _owner = payable(owner);
+        _owner.transfer(address(this).balance);
     }
 
     /// @notice determines whether or not the given bet is a winner 

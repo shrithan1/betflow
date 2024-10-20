@@ -156,7 +156,7 @@ contract Bets is Disableable {
 
         //add the new bet 
         Bet[] storage bets = matchToBets[_matchId]; 
-        bets.push(Bet(msg.sender, _matchId, msg.value, _chosenWinner))-1; 
+        bets.push(Bet(msg.sender, _matchId, msg.value, _chosenWinner)); 
 
         //add the mapping
         bytes32[] storage userBets = userToBets[msg.sender]; 
