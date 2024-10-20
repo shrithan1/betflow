@@ -13,7 +13,7 @@ const teamLogos: Record<string, string> = {
   Bengals: "https://example.com/bengals-logo.png", // Replace with actual logo URL
   Browns: "https://example.com/browns-logo.png", // Replace with actual logo URL
   Dolphins: "https://example.com/dolphins-logo.png", // Replace with actual logo URL
-  Colts: "https://example.com/colts-logo.png", // Replace with actual logo URL
+  Colts: "/@/public/assets/colts.png", // Replace with actual logo URL
 };
 
 const Home: NextPage = () => {
@@ -246,7 +246,7 @@ const Home: NextPage = () => {
                     style={{
                       backgroundColor:
                         selectedGame?.game === game.time &&
-                          selectedGame?.team === team.name
+                        selectedGame?.team === team.name
                           ? "#007aff"
                           : "#1e293b",
                       color: "white",
@@ -408,7 +408,7 @@ const Home: NextPage = () => {
               height: "400px", // Set a fixed height to match the NFL panel
               marginRight: "80px", // Add margin to the right for spacing
               marginTop: "-539px", // Remove any top margin
-              marginLeft: "-10px"
+              marginLeft: "-10px",
             }}
           >
             <h3>Leave a Comment</h3>
@@ -461,8 +461,6 @@ const Home: NextPage = () => {
               )}
             </div>
           </div>
-
-
         </div>
       </div>
     </>
