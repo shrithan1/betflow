@@ -13,6 +13,7 @@ import packers from "@/src/public/assets/packers.png";
 import jaguars from "@/src/public/assets/jaguars.png";
 import patriots from "@/src/public/assets/patriots.png";
 import texans from "@/src/public/assets/texans.png";
+import flow from "@/src/public/assets/flow.png";
 
 // Object mapping team names to their logo URLs
 const teamLogos: Record<string, StaticImageData> = {
@@ -130,26 +131,26 @@ const Home: NextPage = () => {
     },
     {
       time: "10:00 AM",
-      volume: "$0",
+      volume: "$119,780",
       teams: [
-        { name: "Texans", record: "5-1", price: 50 },
-        { name: "Packers", record: "4-2", price: 50 },
+        { name: "Texans", record: "5-1", price: 40 },
+        { name: "Packers", record: "4-2", price: 60 },
       ],
     },
     {
       time: "10:00 AM",
-      volume: "$0",
+      volume: "$17,430",
       teams: [
-        { name: "Bengals", record: "2-4", price: 50 },
-        { name: "Browns", record: "1-5", price: 50 },
+        { name: "Bengals", record: "2-4", price: 70 },
+        { name: "Browns", record: "1-5", price: 30 },
       ],
     },
     {
       time: "10:00 AM",
-      volume: "$0",
+      volume: "$26,780",
       teams: [
-        { name: "Dolphins", record: "2-3", price: 50 },
-        { name: "Colts", record: "3-3", price: 50 },
+        { name: "Dolphins", record: "2-3", price: 44 },
+        { name: "Colts", record: "3-3", price: 56 },
       ],
     },
   ];
@@ -182,19 +183,51 @@ const Home: NextPage = () => {
           backgroundColor: "white",
           minHeight: "100vh",
           display: "flex",
-          flexDirection: "column", // Stack items vertically
-          alignItems: "flex-start", // Align items to the left
-          padding: "20px", // Add padding around the container
+          flexDirection: "column",
+          padding: "20px",
+          position: "relative",
         }}
       >
         {/* Connect Wallet Button at the Top Right */}
         <div
           style={{
-            alignSelf: "flex-end", // Align to the right
-            marginBottom: "20px", // Add margin below the button
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            zIndex: 10,
           }}
         >
           <ConnectButton />
+        </div>
+
+        {/* Logo Image and Title */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+            marginBottom: "20px",
+          }}
+        >
+          <Image
+            src={flow}
+            alt={`Flow logo`}
+            width={36}
+            height={36}
+            style={{
+              marginRight: "10px",
+            }}
+          />
+          <h1
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#333",
+              margin: 0,
+            }}
+          >
+            FlowBets
+          </h1>
         </div>
 
         {/* Wallet Card
@@ -205,8 +238,8 @@ const Home: NextPage = () => {
             padding: "20px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             textAlign: "center",
-            width: "300px", // Set a fixed width for the card
-            marginBottom: "20px", // Add margin below the card
+            width: "300px",
+            marginBottom: "20px",
           }}
         >
         </div> */}
@@ -217,8 +250,8 @@ const Home: NextPage = () => {
             backgroundColor: "#1c1e22",
             borderRadius: "10px",
             padding: "20px",
-            width: "45%", // Adjusted width
-            margin: "0 auto", // Center the panel
+            width: "45%",
+            margin: "0 auto",
             color: "white",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
@@ -266,7 +299,7 @@ const Home: NextPage = () => {
                       width: "48%",
                       cursor: "pointer",
                       display: "flex",
-                      alignItems: "center", // Align logo and text
+                      alignItems: "center",
                       justifyContent: "space-between",
                     }}
                   >
@@ -275,9 +308,9 @@ const Home: NextPage = () => {
                       src={teamLogos[team.name]} // Logo URL from the teamLogos object
                       alt={`${team.name} logo`}
                       style={{
-                        width: "24px", // Set the size of the logo
+                        width: "24px",
                         height: "24px",
-                        marginRight: "10px", // Space between logo and text
+                        marginRight: "10px",
                       }}
                     />
                     <span>
@@ -294,10 +327,10 @@ const Home: NextPage = () => {
         {/* Comment Section */}
         <div
           style={{
-            display: "flex", // Use flexbox for layout
-            justifyContent: "space-between", // Space between the panels
-            alignItems: "flex-start", // Align items to the top
-            padding: "20px", // Add padding around the container
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            padding: "20px",
           }}
         >
           {/* Leave a Comment Panel */}
@@ -308,11 +341,11 @@ const Home: NextPage = () => {
               padding: "20px",
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
               textAlign: "center",
-              width: "70%", // Adjust width as needed
-              height: "400px", // Set a fixed height to match the NFL panel
-              marginRight: "80px", // Add margin to the right for spacing
-              marginTop: "-539px", // Remove any top margin
-              marginLeft: "-10px",
+              width: "22%",
+              height: "400px",
+              marginRight: "100px",
+              marginTop: "-539px",
+              marginLeft: "-20px",
             }}
           >
             <h3>Leave a Comment</h3>
@@ -323,7 +356,7 @@ const Home: NextPage = () => {
                 placeholder="Write your comment here..."
                 style={{
                   width: "100%",
-                  height: "150px", // Increased height for the textarea
+                  height: "150px",
                   borderRadius: "5px",
                   border: "1px solid #ccc",
                   padding: "10px",
