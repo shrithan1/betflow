@@ -3,17 +3,27 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import { BettingCard } from "../components/BettingCard";
 import { useReadContract } from "wagmi";
+import Image, { StaticImageData } from "next/image";
+
+import colts from "@/src/public/assets/colts.png";
+import bengals from "@/src/public/assets/bengals.png";
+import browns from "@/src/public/assets/browns.png";
+import dolphins from "@/src/public/assets/dolphins.png";
+import packers from "@/src/public/assets/packers.png";
+import jaguars from "@/src/public/assets/jaguars.png";
+import patriots from "@/src/public/assets/patriots.png";
+import texans from "@/src/public/assets/texans.png";
 
 // Object mapping team names to their logo URLs
-const teamLogos: Record<string, string> = {
-  Patriots: "https://example.com/patriots-logo.png", // Replace with actual logo URL
-  Jaguars: "https://example.com/jaguars-logo.png", // Replace with actual logo URL
-  Texans: "https://example.com/texans-logo.png", // Replace with actual logo URL
-  Packers: "https://example.com/packers-logo.png", // Replace with actual logo URL
-  Bengals: "https://example.com/bengals-logo.png", // Replace with actual logo URL
-  Browns: "https://example.com/browns-logo.png", // Replace with actual logo URL
-  Dolphins: "https://example.com/dolphins-logo.png", // Replace with actual logo URL
-  Colts: "/@/public/assets/colts.png", // Replace with actual logo URL
+const teamLogos: Record<string, StaticImageData> = {
+  Patriots: patriots, // Replace with actual logo URL
+  Jaguars: jaguars, // Replace with actual logo URL
+  Texans: texans, // Replace with actual logo URL
+  Packers: packers, // Replace with actual logo URL
+  Bengals: bengals, // Replace with actual logo URL
+  Browns: browns, // Replace with actual logo URL
+  Dolphins: dolphins, // Replace with actual logo URL
+  Colts: colts, // Replace with actual logo URL
 };
 
 const Home: NextPage = () => {
@@ -261,7 +271,7 @@ const Home: NextPage = () => {
                     }}
                   >
                     {/* Logo Image */}
-                    <img
+                    <Image
                       src={teamLogos[team.name]} // Logo URL from the teamLogos object
                       alt={`${team.name} logo`}
                       style={{
